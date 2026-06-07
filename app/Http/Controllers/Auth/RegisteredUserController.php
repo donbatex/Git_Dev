@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+// use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
@@ -35,11 +35,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-<<<<<<< HEAD
-        Auth::login($user);
-=======
         // Auth::login($user);
->>>>>>> 07480e591029c77358bd75db8ee5f43005741d15
 
         return response()->noContent();
     }
