@@ -1,13 +1,9 @@
 <?php
-
+use App\Http\Controllers\Api\V1\PostController as V1PostController;
+use App\Http\Controllers\Api\V2\PostController as V2PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-<<<<<<< HEAD
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
-});
-=======
 
 Route::middleware(['auth:sanctum', 'throttle:api'])->group(function () {
     
@@ -43,4 +39,3 @@ require __DIR__.'/auth.php';
 // Route::get('/hello', function () {
 //     return response()->json(['message' => 'Hello Laravel API']);
 // }); 
->>>>>>> 07480e591029c77358bd75db8ee5f43005741d15
