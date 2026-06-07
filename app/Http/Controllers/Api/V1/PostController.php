@@ -7,6 +7,7 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -15,7 +16,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return PostResource::collection(Post::with('author')->paginate(5));
+        // return PostResource::collection(Post::with('author')->paginate(5));
+
+        $user = request()->user();
+        $posts = $user->posts()->paginate(5);
+        // $posts = $user->posts()->with('author')->paginate(5);
+        // $posts = Post::with('author')->paginate(5);
+        return PostResource::collection($posts);
 
         // $posts = Post::all();
         // return response()->json([
@@ -48,7 +55,7 @@ class PostController extends Controller
         //     'body' => 'required|string|min:2'
         // ]);
         // return $data;
-        $data['author_id'] = 2; // Simulate authenticated user ID
+        $data['author_id'] = $request->user()->id; // Simulate authenticated user ID
 
         $post = Post::create($data);
 
@@ -78,6 +85,15 @@ class PostController extends Controller
 
         // $post = Post::findOrFail($post);
 
+        $user = request()->user();
+        
+        abort_if(Auth::id() !== $post->author_id, 403, 'Access Forbidden');
+        
+       
+        // if ($post->author_id !== $user->id) {
+        //     abort(403, 'Access Forbidden');
+        // }
+
         return response()->json([
             // 'message' => 'Post details_V1',
             new PostResource($post)
@@ -92,6 +108,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        abort_if(Auth::id() !== $post->author_id, 403, 'Access Forbidden');
+
         $data = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|min:2'
@@ -112,6 +130,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        abort_if(Auth::id() !== $post->author_id, 403, 'Access Forbidden');
+
         $post->delete(Post::class);
         return response()->noContent();
         // return response()->json(['message' => 'Post deleted successfully']);
