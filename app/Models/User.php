@@ -42,4 +42,9 @@ class User extends Authenticatable implements PasskeyUser
     {
         return $this->hasMany(Post::class, 'author_id');
     }
+
+    public function promptGenerations(): HasMany
+    {
+        return $this->hasMany(PromptGeneration::class);
+    }
 }
